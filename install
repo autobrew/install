@@ -5,12 +5,12 @@
 HOMEBREW_PREFIX = "/usr/local".freeze
 HOMEBREW_REPOSITORY = "/usr/local/Homebrew".freeze
 HOMEBREW_CACHE = "#{ENV["HOME"]}/Library/Caches/Homebrew".freeze
-BREW_REPO = "https://github.com/Homebrew/brew".freeze
+BREW_REPO = "https://github.com/autobrew/brew".freeze
 
 # TODO: bump version when new macOS is released
 MACOS_LATEST_SUPPORTED = "10.15".freeze
 # TODO: bump version when new macOS is released
-MACOS_OLDEST_SUPPORTED = "10.13".freeze
+MACOS_OLDEST_SUPPORTED = "10.11".freeze
 
 # no analytics during installation
 ENV["HOMEBREW_NO_ANALYTICS_THIS_RUN"] = "1"
@@ -346,7 +346,7 @@ Dir.chdir HOMEBREW_REPOSITORY do
 
   system "ln", "-sf", "#{HOMEBREW_REPOSITORY}/bin/brew", "#{HOMEBREW_PREFIX}/bin/brew"
 
-  system "#{HOMEBREW_PREFIX}/bin/brew", "update", "--force"
+  #system "#{HOMEBREW_PREFIX}/bin/brew", "update", "--force"
 end
 
 warn "#{HOMEBREW_PREFIX}/bin is not in your PATH." unless ENV["PATH"].split(":").include? "#{HOMEBREW_PREFIX}/bin"
@@ -356,26 +356,3 @@ puts
 
 # Use the shell's audible bell.
 print "\a"
-
-# Use an extra newline and bold to avoid this being missed.
-ohai "Homebrew has enabled anonymous aggregate formulae and cask analytics."
-puts <<-EOS
-#{Tty.bold}Read the analytics documentation (and how to opt-out) here:
-  #{Tty.underline}https://docs.brew.sh/Analytics#{Tty.reset}
-
-EOS
-
-ohai "Homebrew is run entirely by unpaid volunteers. Please consider donating:"
-puts <<-EOS
-  #{Tty.underline}https://github.com/Homebrew/brew#donations#{Tty.reset}
-EOS
-
-Dir.chdir HOMEBREW_REPOSITORY do
-  system "git", "config", "--replace-all", "homebrew.analyticsmessage", "true"
-  system "git", "config", "--replace-all", "homebrew.caskanalyticsmessage", "true"
-end
-
-ohai "Next steps:"
-puts "- Run `brew help` to get started"
-puts "- Further documentation: "
-puts "    #{Tty.underline}https://docs.brew.sh#{Tty.reset}"
